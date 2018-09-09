@@ -44,18 +44,11 @@ class SensorModule: public CMMC_Module {
     float _temperature;
     float _humidity;
     float _pressure; 
-    float _adc0;
-    int soil_max;
-    int soil_min;
-    int soil_moisture;
-
+    float _adc0; 
     unsigned long counter = 0;
-    Adafruit_ADS1115 *ads;
-    
-  const int currentPin = A0;
-const unsigned long sampleTime = 200000UL;                           // sample over 100ms, it is an exact number of cycles for both 50Hz and 60Hz mains
-const unsigned long numSamples = 250UL;                               // choose the number of samples to divide sampleTime exactly, but low enough for the ADC to keep up
-const unsigned long sampleInterval = sampleTime/numSamples;  // the sampling interval, must be longer than then ADC conversion time
+    const unsigned long sampleTime = 200000UL;                           // sample over 100ms, it is an exact number of cycles for both 50Hz and 60Hz mains
+    const unsigned long numSamples = 250UL;                               // choose the number of samples to divide sampleTime exactly, but low enough for the ADC to keep up
+    const unsigned long sampleInterval = sampleTime/numSamples;  // the sampling interval, must be longer than then ADC conversion time
 //const int adc_zero = 522;                                                     // relative digital zero of the arudino input from ACS712 (could make this a variable and auto-adjust it)
 int adc_zero; 
 

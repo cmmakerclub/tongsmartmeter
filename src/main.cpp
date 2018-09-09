@@ -25,7 +25,6 @@ void setup()
 
   os.setup();
   Serial.printf("APP VERSION: %s\r\n", LEGEND_APP_VERSION);
-  Serial.printf("MEOBOT VERSION: %s\r\n", MEOBOT_VERSION);
 }
 
 void loop()

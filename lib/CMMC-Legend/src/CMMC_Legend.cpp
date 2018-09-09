@@ -27,22 +27,7 @@ bool CMMC_Legend::setEnable(bool status) {
 }
 
 void CMMC_Legend::isLongPressed() {
-  uint32_t prev = millis();
-  while (digitalRead(15) == HIGH) {
-    delay(50);
-    Serial.println("...isLongPressed..");
-    if ( (millis() - prev) > 5L * 1000L) {
-      Serial.println("LONG PRESSED.");
-      blinker->blink(50);
-      while (digitalRead(15) == HIGH) {
-        delay(10);
-      }
-      setEnable(false);
-      Serial.println("being restarted.");
-      delay(1000);
-      ESP.restart();
-    }
-  }
+
 }
 
 void CMMC_Legend::setup() {

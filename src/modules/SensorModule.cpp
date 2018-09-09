@@ -95,21 +95,16 @@ float SensorModule::getAnalog(int slot)
 
 void SensorModule::setup()
 {
-  adc_zero = determineVQ(currentPin); //Quiscent output voltage - the average voltage ACS712 shows with no load (0 A)
-   pinMode(15, OUTPUT);
-   digitalWrite(15, HIGH);
+  adc_zero = determineVQ(A0); //Quiscent output voltage - the average voltage ACS712 shows with no load (0 A)
+  // pinMode(15, OUTPUT);
+  // digitalWrite(15, HIGH);
 }
 
 void SensorModule::loop()
-{
-
+{ 
   interval.every_ms(2000, [&]() {
     int idx = counter % MAX_ARRAY;
-    Serial.print("ACS712@A2:");Serial.print(readCurrent(currentPin),1);Serial.println(" mA");
-        
-        
-
-
+    Serial.print("ACS712@A2:");Serial.print(readCurrent(A0),1);Serial.println(" mA"); 
     // int16_t adc1 = ads->readADC_SingleEnded(1);
     // int16_t adc2 = ads->readADC_SingleEnded(2);
     // int16_t adc3 = ads->readADC_SingleEnded(3);
@@ -123,31 +118,12 @@ void SensorModule::loop()
     //humid_array[idx] = bme->readHumidity();
     if (counter < MAX_ARRAY)
     {
-      _temperature = median(temp_array, idx + 1);
-      _humidity = median(humid_array, idx + 1);
-      _pressure = median(pressure_array, idx + 1);
       _adc0 = median(adc0_array, idx + 1);
     }
     else
     {
-      _temperature = median(temp_array, MAX_ARRAY);
-      _humidity = median(humid_array, MAX_ARRAY);
-      _pressure = median(pressure_array, MAX_ARRAY);
       _adc0 = median(adc0_array, MAX_ARRAY);
-    }
-    
-    float a0_percent = map(_adc0, soil_min, soil_max, 100, 0);
-    if (soil_enable) {
-      soil_moisture_percent = a0_percent; 
-      if (a0_percent <= soil_moisture) {
-        digitalWrite(2, HIGH); 
-      } 
-      else {
-        digitalWrite(2, LOW); 
-      }
-    }
-    Serial.printf("temp=%.2f humid=%.2f, adc0=%.2f, %f%%\r\n", 
-      this->_temperature, this->_humidity, this->_adc0, soil_moisture_percent); 
+    } 
     counter++;
   });
 }
@@ -174,14 +150,16 @@ float SensorModule::getHumidity()
   return _humidity;
 }
 int SensorModule::determineVQ(int PIN) {
-  Serial.print("estimating avg. quiscent voltage:");
+  Serial.println("estimating avg. quiscent voltage:");
   long VQ = 0;
   //read 5000 samples to stabilise value
   for (int i=0; i<5000; i++) {
     VQ += analogRead(PIN);
     delay(1);//depends on sampling (on filter capacitor), can be 1/80000 (80kHz) max.
+    yield();
   }
   VQ /= 5000;
+  Serial.println();
   Serial.print(map(VQ, 0, 1023, 0, 5000));Serial.println(" mV");
   return int(VQ);
 }
@@ -195,7 +173,7 @@ float SensorModule::readCurrent(int PIN)
   {
     if (micros() - prevMicros >= sampleInterval)
     {
-      int adc_raw = analogRead(currentPin) - adc_zero;
+      int adc_raw = analogRead(PIN) - adc_zero;
       currentAcc += (unsigned long)(adc_raw * adc_raw);
       ++count;
       prevMicros += sampleInterval;
@@ -206,5 +184,5 @@ float SensorModule::readCurrent(int PIN)
   //Serial.println(rms);
 }
 int SensorModule::getCurrent(){
-  return readCurrent(currentPin);
+  return readCurrent(A0);
 }
