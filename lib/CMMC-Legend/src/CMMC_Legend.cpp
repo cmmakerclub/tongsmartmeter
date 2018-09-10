@@ -37,12 +37,7 @@ void CMMC_Legend::setup() {
 void CMMC_Legend::init_gpio() {
   Serial.begin(57600);
   Serial.println("OS::Init GPIO..");
-  pinMode(15, INPUT);
-  blinker = new CMMC_LED;
-  blinker->init();
-  blinker->setPin(16);
   Serial.println();
-  blinker->blink(500);
   delay(10);
 }
 
@@ -97,7 +92,6 @@ void CMMC_Legend::init_network() {
 
     setupWebServer(&server, &ws, &events);
 
-    blinker->blink(50);
     uint32_t startConfigLoopAtMs = millis();
     while (1 && !stopFlag) {
       for (int i = 0 ; i < _modules.size(); i++) { 
@@ -113,21 +107,15 @@ void CMMC_Legend::init_network() {
 
     SPIFFS.begin();
     File f = SPIFFS.open("/enabled", "a+");
-    blinker->blink(50);
     delay(200);;
     ESP.restart(); 
   }
   else if (mode == RUN) {
     system_update_cpu_freq(80);
-    blinker->blink(4000);
     for (int i = 0 ; i < _modules.size(); i++) {
       _modules[i]->setup();
     }
   }
-}
-
-CMMC_LED *CMMC_Legend::getBlinker() {
-  return blinker;
 }
 
 void CMMC_Legend::_init_ap() {
@@ -166,7 +154,6 @@ void CMMC_Legend::setupWebServer(AsyncWebServer *server, AsyncWebSocket *ws, Asy
 
   server->on("/reboot", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send(200, "text/plain", "OK");
-    blinker->blink(20);
     ESP.restart();
   });
 
@@ -213,7 +200,6 @@ void CMMC_Legend::setupWebServer(AsyncWebServer *server, AsyncWebSocket *ws, Asy
     //Upload handler chunks in data
     if (!index) { // if index == 0 then this is the first frame of data
       SPIFFS.end();
-      blinker->detach();
       Serial.println("upload start...");
       Serial.printf("UploadStart: %s\n", filename.c_str());
       Serial.setDebugOutput(true);
@@ -234,7 +220,6 @@ void CMMC_Legend::setupWebServer(AsyncWebServer *server, AsyncWebSocket *ws, Asy
     if (final) { // if the final flag is set then this is the last frame of data
       if (Update.end(true)) { //true to set the size to the current progress
         Serial.printf("Update Success: %u B\nRebooting...\n", index + len);
-        blinker->blink(1000);
       } else {
         Update.printError(Serial);
       }
@@ -298,7 +283,6 @@ void CMMC_Legend::setupWebServer(AsyncWebServer *server, AsyncWebSocket *ws, Asy
     //Upload handler chunks in data
     if (!index) { // if index == 0 then this is the first frame of data
       SPIFFS.end();
-      blinker->detach();
       Serial.println("upload start...");
       Serial.printf("UploadStart: %s\n", filename.c_str());
       Serial.setDebugOutput(true);
@@ -321,7 +305,6 @@ void CMMC_Legend::setupWebServer(AsyncWebServer *server, AsyncWebSocket *ws, Asy
         Serial.printf("Update Success: %u B\nRebooting...\n", index + len);
           that->stopFlag = true;
           stopFlag = true;
-        blinker->blink(1000);
       } else {
         Update.printError(Serial);
       }

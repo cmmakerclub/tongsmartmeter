@@ -1,7 +1,5 @@
 #include <CMMC_Legend.h>
 #include "MqttModule.h" 
-#include "SensorModule.h"
-extern SensorModule* sensorModule;
 
 #define MQTT_CONFIG_FILE "/mymqtt.json"
 extern const char* MEOBOT_VERSION;
@@ -92,8 +90,11 @@ void MqttModule::configLoop() {
 
 void MqttModule::setup()
 {
-  Serial.println("MqttModule::setup");
-  init_mqtt();
+  Serial.println("MqttModule::setup"); 
+  // pinMode(15, OUTPUT);
+  // pinMode(2, OUTPUT);
+  
+  init_mqtt(); 
   static MqttModule *that;
   that = this;
   mqttMessageTicker.attach_ms(1000, []() {
@@ -197,10 +198,13 @@ void MqttModule::register_receive_hooks(MqttConnector *mqtt)
       if (payload == "ON")
       {
         Serial.println("ON");
+        // digitalWrite(2, LOW);
+        // digitalWrite(15, HIGH);
       }
       else if (payload == "OFF")
       {
-        Serial.println("OFF");
+        // digitalWrite(2, HIGH);
+        // digitalWrite(15, LOW);
       }
       else if (payload == "FORCE_CONFIG")
       {
@@ -245,7 +249,6 @@ void MqttModule::register_publish_hooks(MqttConnector *mqtt)
     data["millis"] = millis();
     data["PUBLISH_EVERY_S"] = PUBLISH_EVERY/1000;
     data["mqttMessageTimeout"] = mqttMessageTimeout; 
-    data["current_ma"] = sensorModule->getCurrent(); 
     Serial.println("PUBLISHING...!");
   }, PUBLISH_EVERY);
 

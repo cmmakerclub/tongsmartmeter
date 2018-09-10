@@ -3,7 +3,6 @@
 #define CMMC_MQTT_MODULE_H
 
 #include <MqttConnector.h>
-#include <CMMC_Sensor.h>
 #include <CMMC_Module.h>
 #include <Ticker.h>
 

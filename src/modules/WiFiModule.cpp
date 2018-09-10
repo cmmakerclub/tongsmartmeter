@@ -4,28 +4,28 @@
 
 
 void WiFiModule::isLongPressed() {
-  if (digitalRead(15) == HIGH) {
-    while(digitalRead(15) == HIGH) {
-      delay(10); 
-    }
-    SPIFFS.remove("/enabled");
-    digitalWrite(0, HIGH);
-    delay(2000);
-    ESP.restart();
-  }
+  // if (digitalRead(15) == HIGH) {
+  //   while(digitalRead(15) == HIGH) {
+  //     delay(10); 
+  //   }
+  //   SPIFFS.remove("/enabled");
+  //   digitalWrite(0, HIGH);
+  //   delay(2000);
+  //   ESP.restart();
+  // }
 }
 
 void WiFiModule::configLoop() {
-  if (digitalRead(15) == HIGH) {
-    while(digitalRead(15) == HIGH) {
-      delay(10); 
-    }
-    File f = SPIFFS.open("/enabled", "a+");
-    f.close();
-    digitalWrite(0, HIGH);
-    delay(100);
-    ESP.restart();
-  }
+  // if (digitalRead(15) == HIGH) {
+  //   while(digitalRead(15) == HIGH) {
+  //     delay(10); 
+  //   }
+  //   File f = SPIFFS.open("/enabled", "a+");
+  //   f.close();
+  //   digitalWrite(0, HIGH);
+  //   delay(100);
+  //   ESP.restart();
+  // }
 }
 
 void WiFiModule::configSetup() {
