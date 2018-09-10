@@ -95,9 +95,9 @@ float SensorModule::getAnalog(int slot)
 
 void SensorModule::setup()
 {
-  adc_zero = determineVQ(A0); //Quiscent output voltage - the average voltage ACS712 shows with no load (0 A)
-  // pinMode(15, OUTPUT);
-  // digitalWrite(15, HIGH);
+  adc_zero = determineVQ(A0);
+  pinMode(15, OUTPUT);
+  digitalWrite(15, HIGH);
 }
 
 void SensorModule::loop()
