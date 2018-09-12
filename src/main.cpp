@@ -3,6 +3,7 @@
 
 #include "modules/WiFiModule.h"
 #include "modules/MqttModule.h"
+#include "modules/SensorModule.h"
 #include "modules/ConfigButtonModule.h"
 
 const char* MEOBOT_VERSION = "1.4";
@@ -11,11 +12,19 @@ CMMC_Legend os;
 
 WiFiModule* wifiModule; 
 MqttModule *mqttModule;
+SensorModule *sensorModule;
 
 void setup()
 { 
-  wifiModule = new WiFiModule(); 
-  mqttModule = new MqttModule(); 
+  pinMode(15, OUTPUT);
+  pinMode(2, OUTPUT);
+
+  digitalWrite(15, HIGH); 
+  digitalWrite(2, LOW); 
+
+
+  wifiModule = new WiFiModule();
+  sensorModule = new SensorModule();
 
   os.addModule(wifiModule); 
   os.addModule(mqttModule); 

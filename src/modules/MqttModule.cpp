@@ -198,18 +198,20 @@ void MqttModule::register_receive_hooks(MqttConnector *mqtt)
       if (payload == "ON")
       {
         Serial.println("ON");
-        // digitalWrite(2, LOW);
-        // digitalWrite(15, HIGH);
+        digitalWrite(2, LOW);
+        digitalWrite(15, HIGH);
       }
       else if (payload == "OFF")
       {
-        // digitalWrite(2, HIGH);
-        // digitalWrite(15, LOW);
+        Serial.println("OFF");
+        digitalWrite(2, HIGH);
+        digitalWrite(15, LOW);
       }
       else if (payload == "FORCE_CONFIG")
       {
         SPIFFS.remove("/enabled");
         digitalWrite(0, HIGH);
+        delay(200);
         ESP.restart();
       }
     }
