@@ -17,16 +17,20 @@ SensorModule *sensorModule;
 void setup()
 { 
   pinMode(15, OUTPUT);
+  pinMode(13, INPUT);
+  pinMode(0, OUTPUT);
   pinMode(2, OUTPUT);
 
   digitalWrite(15, HIGH); 
   digitalWrite(2, LOW); 
 
 
+  mqttModule = new MqttModule();
   wifiModule = new WiFiModule();
   sensorModule = new SensorModule();
 
   os.addModule(wifiModule); 
+  os.addModule(sensorModule); 
   os.addModule(mqttModule); 
 
   os.setup();

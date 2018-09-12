@@ -37,7 +37,6 @@ void CMMC_Legend::setup() {
 void CMMC_Legend::init_gpio() {
   Serial.begin(57600);
   Serial.println("OS::Init GPIO..");
-  pinMode(15, INPUT);
   Serial.println();
   delay(10);
 }
