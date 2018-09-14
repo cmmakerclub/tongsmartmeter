@@ -1,8 +1,10 @@
 #include <CMMC_Legend.h>
 #include "MqttModule.h" 
+#include "SensorModule.h" 
 
 #define MQTT_CONFIG_FILE "/mymqtt.json"
 extern const char* MEOBOT_VERSION;
+extern SensorModule *sensorModule;
 
 void MqttModule::config(CMMC_System *os, AsyncWebServer *server)
 {
@@ -249,6 +251,7 @@ void MqttModule::register_publish_hooks(MqttConnector *mqtt)
     data["appVersion"] = String(MEOBOT_VERSION);
     data["myName"] = DEVICE_NAME;
     data["millis"] = millis();
+    data["current_ma"] = sensorModule->getCurrent(); 
     data["PUBLISH_EVERY_S"] = PUBLISH_EVERY/1000;
     data["mqttMessageTimeout"] = mqttMessageTimeout; 
     Serial.println("PUBLISHING...!");
